@@ -6,7 +6,7 @@ import kotlin.math.absoluteValue
 
 fun main() {
     fun isValid(report: List<Int>): Boolean {
-        val distance = report.zip(report.drop(1)).map { (a, b) -> a - b }
+        val distance = report.zipWithNext().map { (a, b) -> a - b }
         return (distance.all { it > 0 } || distance.all { it < 0 }) && distance.all { it.absoluteValue in 1..3 }
     }
 
