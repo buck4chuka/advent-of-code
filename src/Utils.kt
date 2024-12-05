@@ -21,3 +21,7 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 fun Any?.println() = println(this)
 
 fun <T, U> Iterable<T>.cartesianProduct(other: Iterable<U>): List<Pair<T, U>> = this.flatMap { other.map { b -> it to b } }
+fun directions(): List<Pair<Int, Int>> {
+    val range = (-1..1)
+    return range.cartesianProduct(range).filter { it != Pair(0, 0) }
+}
