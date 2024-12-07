@@ -7,20 +7,18 @@ import kotlin.math.abs
 fun main() {
     fun toLeftRight(input: List<String>): Pair<List<Int>, List<Int>> {
         return input.foldRight(Pair(listOf(), listOf())) { line, acc ->
-            val (left, right) =  line.split("\\s+".toRegex()).map { it.toInt() }
+            val (left, right) = line.split("\\s+".toRegex()).map { it.toInt() }
             Pair(acc.first + left, acc.second + right)
         }
     }
 
     fun part1(input: List<String>): Int {
-        val(left,right) = toLeftRight(input)
-        return left.sorted().zip(right.sorted()).fold(0) { acc, (l, r) ->
-            acc + abs( l - r)
-        }
+        val (left, right) = toLeftRight(input)
+        return left.sorted().zip(right.sorted()).sumOf { abs(it.first - it.second) }
     }
 
     fun part2(input: List<String>): Int {
-        val(left,right) = toLeftRight(input)
+        val (left, right) = toLeftRight(input)
         val rFreqCount = right.groupingBy { it }.eachCount()
         return left.sumOf { (rFreqCount[it] ?: 0) * it }
     }
