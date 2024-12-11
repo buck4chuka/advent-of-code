@@ -8,7 +8,7 @@ fun main() {
         val pattern = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)")
         return input
             .flatMap { pattern.findAll(it).map { r -> r.groupValues.drop(1) } }
-            .foldRight(0) { (a, b), acc -> acc + (a.toInt() * b.toInt()) }
+            .sumOf { (a,b) -> a.toInt() * b.toInt() }
     }
 
     fun part2(input: List<String>): Int {
