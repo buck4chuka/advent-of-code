@@ -1,7 +1,9 @@
 package year2024.day11
 
+import Point2D
 import println
 import readInput
+import java.awt.Point
 
 data class Stone(val engraving: String) {
     private val halfLen = engraving.length / 2
@@ -14,6 +16,8 @@ data class Stone(val engraving: String) {
         else -> listOf(Stone((engraving.toLong() * 2024).toString()))
     }
 }
+
+
 
 fun List<Stone>.blink(blinkTimes: Int): Long {
     val memo = mutableMapOf<Pair<Stone, Int>, Long>()
