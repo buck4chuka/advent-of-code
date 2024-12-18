@@ -20,12 +20,21 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println() = println(this)
 
-fun <T, U> Iterable<T>.cartesianProduct(other: Iterable<U>): List<Pair<T, U>> = this.flatMap { other.map { b -> it to b } }
+fun <T, U> Iterable<T>.cartesianProduct(other: Iterable<U>): List<Pair<T, U>> =
+    this.flatMap { other.map { b -> it to b } }
+
 val directions = (-1..1).cartesianProduct((-1..1)).filter { it != Pair(0, 0) }
 
-data class Point2D(val x: Int, val y: Int){
+data class Point2D(val x: Int, val y: Int) {
     operator fun minus(other: Point2D): Point2D = Point2D(x - other.x, y - other.y)
-    operator fun plus(other: Point2D): Point2D  = Point2D(x + other.x, y + other.y)
+    operator fun plus(other: Point2D): Point2D = Point2D(x + other.x, y + other.y)
 }
 
-val nsewDirections = listOf(Pair(0,1),Pair(0,-1),Pair(1,0), Pair(-1,0))
+val nsewDirections = listOf(Pair(0, 1), Pair(0, -1), Pair(1, 0), Pair(-1, 0))
+
+enum class Direction(val r: Int, val c: Int) {
+    EAST(0, 1),
+    WEST(0, -1),
+    NORTH(1, 0),
+    SOUTH(-1, 0)
+}
