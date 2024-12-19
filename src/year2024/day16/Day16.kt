@@ -19,7 +19,7 @@ private fun List<String>.isValidLocation(coordinate: Pair<Int, Int>): Boolean {
     return this.getOrNull(coordinate.first)?.getOrNull(coordinate.second) in validLocations
 }
 
-private operator fun Pair<Int, Int>.plus(other: Direction): Pair<Int, Int> {
+ operator fun Pair<Int, Int>.plus(other: Direction): Pair<Int, Int> {
     return first + other.r to second + other.c
 }
 
