@@ -38,3 +38,7 @@ enum class Direction(val r: Int, val c: Int) {
     NORTH(1, 0),
     SOUTH(-1, 0)
 }
+
+operator fun Pair<Int, Int>.plus(other: Direction): Pair<Int, Int> {
+    return first + other.r to second + other.c
+}

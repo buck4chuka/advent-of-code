@@ -3,20 +3,10 @@ package year2024.day23
 import println
 import readInput
 
-fun part1(input: List<String>): Int {
-    val graph = input.fold(emptyMap<String, Set<String>>()) { acc, s ->
-        val (a, b) = s.split("-")
-        val aChildren = (acc[a] ?: emptySet()) + b
-        val bChildren = (acc[b] ?: emptySet()) + a
-        acc + (a to aChildren) + (b to bChildren)
-    }
-
+fun part1(graph: Map<String, Set<String>>): Int {
     val connectedComponents = mutableSetOf<Set<String>>()
-
-
     fun dfs(island: Set<String>, start: String, computer: String, level: Int = 0) {
         if (level > 3) return
-
         graph[computer]?.forEach {
             if (it == start && level == 2) {
                 connectedComponents.add(island)
@@ -32,27 +22,22 @@ fun part1(input: List<String>): Int {
     return connectedComponents.count { it.any { c -> c.startsWith("t") } }
 }
 
-
-fun part2(input: List<String>): Long {
-    val graph = input.fold(emptyMap<String, Set<String>>()) { acc, s ->
-        val (a, b) = s.split("-")
-        val aChildren = (acc[a] ?: emptySet()) + b
-        val bChildren = (acc[b] ?: emptySet()) + a
-        acc + (a to aChildren) + (b to bChildren)
-    }
-
+fun findCliques(graph: Map<String, Set<String>>): Set<Set<String>> {
     val allVertices = graph.keys
 
     val cliques = mutableSetOf<Set<String>>()
 
-    fun bk(r: Set<String>, p: Set<String>, x: Set<String>) {
+    fun bronKerbosch(r: Set<String>, p: Set<String>, x: Set<String>) {
         if (p.isEmpty() && x.isEmpty()) {
             cliques.add(r)
             return
         }
 
-        p.forEach {
-            bk(
+        val v = (p.union(x)).random()
+
+
+        (p - graph[v]!!).forEach {
+            bronKerbosch(
                 r + it,
                 graph[it]!!.intersect(p + it).toMutableSet(),
                 graph[it]!!.intersect(x - it).toMutableSet()
@@ -60,22 +45,24 @@ fun part2(input: List<String>): Long {
         }
     }
 
-    bk(emptySet(), allVertices.toMutableSet(), mutableSetOf())
+    bronKerbosch(emptySet(), allVertices.toMutableSet(), mutableSetOf())
 
-    cliques.maxBy {  it.count()}.toList().sorted().joinToString(",").println()
+    return cliques.toSet()
+}
 
-    return 0L
+
+fun part2(graph: Map<String, Set<String>>): String {
+    return findCliques(graph).maxBy { it.count() }.toList().sorted().joinToString(",")
 }
 
 fun main() {
-    val input = readInput("year2024/day23/sample")
-//    part1(input).println()
-    part2(input).println()
+    val input = readInput("year2024/day23/Day23")
+    val graph = input.fold(emptyMap<String, Set<String>>()) { acc, s ->
+        val (a, b) = s.split("-")
+        val aChildren = (acc[a] ?: emptySet()) + b
+        val bChildren = (acc[b] ?: emptySet()) + a
+        acc + (a to aChildren) + (b to bChildren)
+    }
+    part1(graph).println()
+    part2(graph).println()
 }
-
-
-// c -> b
-// c -> a
-// a -> b
-
-//
