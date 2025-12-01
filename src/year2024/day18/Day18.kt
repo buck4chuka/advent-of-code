@@ -3,7 +3,7 @@ package year2024.day18
 import Direction
 import println
 import readInput
-import sun.misc.Queue
+
 import year2024.day16.plus
 
 
@@ -16,8 +16,8 @@ fun part1(input: List<Pair<Int, Int>>,end:Pair<Int,Int> = 70 to 70, firstBytes:I
 }
 
 private fun shortestPath(unsafe: Set<Pair<Int, Int>>,end: Pair<Int, Int> = 70 to 70): Map<Pair<Int, Int>, Vertex> {
-    val c = Queue<Vertex>()
-    c.enqueue(Vertex(0 to 0, 0))
+    val c = ArrayDeque<Vertex>()
+    c.add(Vertex(0 to 0, 0))
 
     val seen = mutableMapOf<Pair<Int, Int>, Vertex>()
 
@@ -25,8 +25,8 @@ private fun shortestPath(unsafe: Set<Pair<Int, Int>>,end: Pair<Int, Int> = 70 to
         it.first in 0..end.first && it.second in 0.. end.second
     }
 
-    while (!c.isEmpty) {
-        val curr = c.dequeue()
+    while (c.isNotEmpty()) {
+        val curr = c.removeFirst()
         if (curr.coords in seen) continue
         seen[curr.coords] = curr
 
@@ -35,7 +35,7 @@ private fun shortestPath(unsafe: Set<Pair<Int, Int>>,end: Pair<Int, Int> = 70 to
         Direction.entries.map { curr.coords + it }
             .filter { !seen.contains(it) && isInbounds(it) && it !in unsafe }
             .forEach {
-                c.enqueue(Vertex(it, curr.steps + 1, prev = curr))
+                c.add(Vertex(it, curr.steps + 1, prev = curr))
             }
     }
     return seen
