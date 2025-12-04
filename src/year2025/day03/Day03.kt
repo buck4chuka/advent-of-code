@@ -2,25 +2,20 @@ package year2025.day03
 
 import println
 import readInput
+import kotlin.text.toList
+
 
 
 fun findHighest(digitSize: Int): (String) -> Long =
     { input ->
-        val initial = input.substring(0 until digitSize).toMutableList()
-        val remaining = input.substring(digitSize)
-
-        for (char in remaining) {
-            initial.add(char)
-            for (i in 0 until initial.size - 1) {
-                if (initial[i] < initial[i + 1]) {
-                    initial.removeAt(i)
-                    break
-                }
-            }
-            if (initial.size > digitSize) initial.removeLast()
-        }
-        initial.joinToString("").toLong()
+        val (initial, remaining) = input.take(digitSize) to input.drop(digitSize)
+        remaining.fold(initial.toList()) { digits, char ->
+            val currDigits = digits + char
+            val idx = currDigits.indices.firstOrNull { (it < currDigits.lastIndex && currDigits[it] < currDigits[it + 1]) || it == currDigits.lastIndex}
+            currDigits.filterIndexed { i, _ -> i != idx }
+        }.joinToString("").toLong()
     }
+
 
 fun main() {
     fun part1(input: List<String>): Long = input.sumOf { findHighest(2)(it) }
